@@ -4,14 +4,11 @@ import './index.css';
 import './react-envelope/variables.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { ThemeProvider } from './react-envelope/contexts/ThemeContexts';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <ThemeProvider>
-      <App/>
-    </ThemeProvider>
+    <App/>
   </React.StrictMode>
 );
 
