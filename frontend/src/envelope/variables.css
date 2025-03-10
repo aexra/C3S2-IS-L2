@@ -1,0 +1,14 @@
+body {
+    --dstu-dark-blue: #2a4a77;
+    --dstu-blue: #4a76a8;
+    --dstu-light-blue: #365da6;
+    --dstu-error-color: #ff5252;
+}
+
+body.light {
+    
+}
+
+body.dark {
+    
+}
