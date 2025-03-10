@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import './envelope/variables.css';
+import './react-envelope/variables.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { ThemeProvider } from './envelope/contexts/ThemeContexts';
+import { ThemeProvider } from './react-envelope/contexts/ThemeContexts';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
