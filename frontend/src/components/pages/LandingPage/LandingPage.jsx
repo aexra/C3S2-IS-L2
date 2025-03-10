@@ -33,6 +33,10 @@ export const LandingPage = () => {
     const update = (id) => {
         setDisplayedData(getSubjectRights(id));
     };
+
+    const handleConsole = (e) => {
+        return "xaaa";
+    };
     
     return (
         <VBoxPanel valign='center'
@@ -50,7 +54,8 @@ export const LandingPage = () => {
                                                                   name={o[1]}
                                                                   rights={o[0]}/>)}
                         </VBoxPanel>
-                        <Console className={css.con}/>
+                        <Console className={css.con}
+                                 onSubmit={handleConsole}/>
                     </HBoxPanel>
                     <ExButton onClick={() => {
                         toast("Вы успешно вышли из аккаунта", {
