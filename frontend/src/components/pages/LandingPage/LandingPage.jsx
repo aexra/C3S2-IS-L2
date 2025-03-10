@@ -7,11 +7,13 @@ import { useContext, useRef, useState } from 'react';
 import { LabContext, useLab } from '../../../Contexts/LabContext';
 import HBoxPanel from '../../../react-envelope/components/layouts/HBoxPanel/HBoxPanel';
 import { CObject } from '../../dummies/CObject/CObject';
+import { Console } from '../../../react-envelope/components/widgets/Console/Console';
 
 export const LandingPage = () => {
     const { subjects, objects, getSubjectRights } = useContext(LabContext);
     const identityRef = useRef(null);
     const [login, logIn] = useState(null);
+    const [displayedData, setDisplayedData] = useState([]);
     
     const handleLoginClick = () => {
         const id = identityRef.current.value;
@@ -20,11 +22,16 @@ export const LandingPage = () => {
                 type: 'success'
             });
             logIn(id);
+            update(id);
         } else {
             toast(`Идентификатор ${id} не найден`, {
                 type: 'error'
             });
         }
+    };
+
+    const update = (id) => {
+        setDisplayedData(getSubjectRights(id));
     };
     
     return (
@@ -37,12 +44,13 @@ export const LandingPage = () => {
             {login ? 
                 <VBoxPanel gap={'20px'}>
                     <HBoxPanel className={`${css.userPanel} panel`}
-                            gap='20px'>
+                               gap='20px'>
                         <VBoxPanel gap='10px' className={`y-scroll ${css.objects}`}>
-                            {getSubjectRights(login).map((o, i) => <CObject key={i}
-                                                                            name={o[1]}
-                                                                            rights={o[0]}/>)}
+                            {displayedData.map((o, i) => <CObject key={i}
+                                                                  name={o[1]}
+                                                                  rights={o[0]}/>)}
                         </VBoxPanel>
+                        <Console className={css.con}/>
                     </HBoxPanel>
                     <ExButton onClick={() => {
                         toast("Вы успешно вышли из аккаунта", {
