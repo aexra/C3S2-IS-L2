@@ -1,0 +1,9 @@
+.name {
+    /* align-self: center; */
+}
+
+.tag {
+    border-radius: 10px;
+    background: aquamarine;
+    padding: 5px 10px;
+}

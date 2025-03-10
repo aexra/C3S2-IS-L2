@@ -20,3 +20,13 @@
     color: #333;
     align-self: center;
 }
+
+.userPanel {
+    padding: 20px;
+    width: 800px;
+    height: 400px;
+}
+
+.objects {
+    width: 350px;
+}

@@ -1,20 +1,24 @@
-export class Rights {
-    public read: boolean = false;
-    public write: boolean = false;
-    public grant: boolean = false;
+import { createContext } from "react";
 
-    public constructor(r: boolean, w: boolean, g: boolean) {
+export class Rights {
+    read = false;
+    write = false;
+    grant = false;
+
+    constructor(r, w, g) {
         this.read = r;
         this.write = w;
         this.grant = g;
     }
 }
 
-export const useLab = () => {
+export const LabContext = createContext();
+
+export const LabProvider = ({ children }) => {
     const subjects = ["Олег", "Ваня", "Антон", "Abobabebebe", "Igor"];
     const objects = ["Object 1", "Object 2", "Object 3", "Object 4", "Object 5"];
 
-    const rights: Rights[][] = [];
+    const rights = [];
 
     const getRandomBoolean = () => {
         return Math.random() > 0.5;
@@ -33,4 +37,18 @@ export const useLab = () => {
     for (var o = 0; o < objects.length; o++) {
         rights[4][o] = new Rights(true, true, true);
     }
+
+    const getSubjectRights = (sub) => {
+        return rights[subjects.indexOf(sub)].map((e, i) => [e, objects[i]]);
+    };
+
+    return (
+        <LabContext.Provider value={{
+            subjects,
+            objects,
+            getSubjectRights
+        }}>
+            {children}
+        </LabContext.Provider>
+    );
 };
