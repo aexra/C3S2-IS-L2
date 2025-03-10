@@ -1,3 +1,22 @@
 .p {
-    
+    height: 100vh;
+    background-color: #fff;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: stretch;
+    padding: 20px;
+
+    width: 300px;
+    height: auto;
+
+    background-color: #fff;
+}
+
+.title {
+    color: #333;
+    align-self: center;
 }
