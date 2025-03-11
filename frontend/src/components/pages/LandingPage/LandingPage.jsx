@@ -40,17 +40,17 @@ export const LandingPage = () => {
         switch (tokens[0]) {
             case "read":
                 if (RegExp("[0-9]*").test(tokens[1]) && 0 <= tokens[1] && tokens[1] < displayedData.length) {
-                    if (displayedData[tokens[1]][0].read) return `Выполнено чтение объекта №${tokens[1]}: "${displayedData[tokens[1]][1]}"`;
-                    else return `Недостаточно прав для чтения объекта №${tokens[1]}: "${displayedData[tokens[1]][1]}"`;
+                    if (displayedData[tokens[1]][0].read) return {msg: `Выполнено чтение объекта №${tokens[1]}: "${displayedData[tokens[1]][1]}"`, type: 'success'};
+                    else return {msg: `Недостаточно прав для чтения объекта №${tokens[1]}: "${displayedData[tokens[1]][1]}"`, type: 'error'};
                 } else {
-                    return `Неверный идентификатор объекта: "${tokens[1]}"`;
+                    return {msg: `Неверный идентификатор объекта: "${tokens[1]}"`, type: 'error'};
                 }
             case "write":
                 if (RegExp("[0-9]*").test(tokens[1]) && 0 <= tokens[1] && tokens[1] < displayedData.length) {
-                    if (displayedData[tokens[1]][0].write) return `Выполнена запись в объект №${tokens[1]}: "${displayedData[tokens[1]][1]}"`;
-                    else return `Недостаточно прав для записи в объект №${tokens[1]}: "${displayedData[tokens[1]][1]}"`;
+                    if (displayedData[tokens[1]][0].write) return {msg: `Выполнена запись в объект №${tokens[1]}: "${displayedData[tokens[1]][1]}"`, type: 'success'};
+                    else return {msg: `Недостаточно прав для записи в объект №${tokens[1]}: "${displayedData[tokens[1]][1]}"`, type: 'error'};
                 } else {
-                    return `Неверный идентификатор объекта: "${tokens[1]}"`;
+                    return {msg: `Неверный идентификатор объекта: "${tokens[1]}"`, type: 'error'};
                 }
             case "grant":
                 const id = tokens[1];
@@ -59,19 +59,19 @@ export const LandingPage = () => {
                 const value = tokens[4];
                 if (RegExp("[0-9]*").test(id) && 0 <= id && id < displayedData.length) {
                     if (displayedData[id][0].grant) {
-                        if (!subjects.includes(target)) return `Не найден идентификатор пользователя: ${target}`;
+                        if (!subjects.includes(target)) return {msg: `Не найден идентификатор пользователя: ${target}`, type: 'warning'};
                         if (right === "read" || right === "write" || right === "grant") {
-                            if (setRight(target, id, right, value)) return `Установлено правило: ${target}-${id}-${right}-${value}`;
-                            else return `Unandled exception...`;
+                            if (setRight(target, id, right, value)) return {msg: `Установлено правило: ${target}-${id}-${right}-${value}`, type: 'success'};
+                            else return {msg: `Unandled exception...`, type: 'error'};
                         } else {
-                            return `Не распознано имя командлета: "${tokens[2]}"`;
+                            return {msg: `Не распознано имя командлета: "${tokens[2]}"`, type: 'error'};
                         }
-                    } else return `Недостаточно прав для передачи доступа к объекту №${id}: "${displayedData[id][1]}"`;
+                    } else return {msg: `Недостаточно прав для передачи доступа к объекту №${id}: "${displayedData[id][1]}"`, type: 'error'};
                 } else {
-                    return `Неверный идентификатор объекта: "${id}"`;
+                    return {msg: `Неверный идентификатор объекта: "${id}"`, type: 'error'};
                 }
             default:
-                return `Не распознано имя командлета: "${tokens[0]}"`;
+                return {msg: `Не распознано имя командлета: "${tokens[0]}"`, type: 'error'};
         }
     };
     

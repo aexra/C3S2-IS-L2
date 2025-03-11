@@ -42,7 +42,7 @@ export const LabProvider = ({ children }) => {
         return rights[subjects.indexOf(sub)].map((e, i) => [e, objects[i]]);
     };
 
-    const setRight = (sub, obj, right, value) => {
+    const setRight = (sub, obj, right, value = '1') => {
         if (subjects.includes(sub) && 0 <= obj && obj <= objects.length && (right === "read" || right === "write" || right === "grant")) {
             const id = subjects.indexOf(sub);
             switch (right) {
