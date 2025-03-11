@@ -42,11 +42,32 @@ export const LabProvider = ({ children }) => {
         return rights[subjects.indexOf(sub)].map((e, i) => [e, objects[i]]);
     };
 
+    const setRight = (sub, obj, right, value) => {
+        if (subjects.includes(sub) && 0 <= obj && obj <= objects.length && (right === "read" || right === "write" || right === "grant")) {
+            const id = subjects.indexOf(sub);
+            switch (right) {
+                case "read":
+                    rights[id][obj].read = (value === '1' ? true : false);
+                    break;
+                case "write":
+                    rights[id][obj].write = (value === '1' ? true : false);
+                    break;
+                default:
+                    rights[id][obj].grant = (value === '1' ? true : false);
+                    break;
+            }
+
+            return true;
+        }
+        return false;
+    }
+
     return (
         <LabContext.Provider value={{
             subjects,
             objects,
-            getSubjectRights
+            getSubjectRights,
+            setRight
         }}>
             {children}
         </LabContext.Provider>
