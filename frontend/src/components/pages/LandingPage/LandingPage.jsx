@@ -10,7 +10,7 @@ import { CObject } from '../../dummies/CObject/CObject';
 import { Console } from '../../../react-envelope/components/widgets/Console/Console';
 
 export const LandingPage = () => {
-    const { subjects, objects, getSubjectRights, setRight } = useContext(LabContext);
+    const { subjects, objects, getSubjectRights, setRight, setFiles, writeFile } = useContext(LabContext);
     const identityRef = useRef(null);
     const [login, logIn] = useState(null);
     const [displayedData, setDisplayedData] = useState([]);
@@ -40,14 +40,18 @@ export const LandingPage = () => {
         switch (tokens[0]) {
             case "read":
                 if (RegExp("[0-9]*").test(tokens[1]) && 0 <= tokens[1] && tokens[1] < displayedData.length) {
-                    if (displayedData[tokens[1]][0].read) return {msg: `Выполнено чтение объекта №${tokens[1]}: "${displayedData[tokens[1]][1]}"`, type: 'success'};
+                    if (displayedData[tokens[1]][0].read) return {msg: `Выполнено чтение объекта №${tokens[1]}: "${displayedData[tokens[1]][1].name}": ${displayedData[tokens[1]][1].content}`, type: 'success'};
                     else return {msg: `Недостаточно прав для чтения объекта №${tokens[1]}: "${displayedData[tokens[1]][1]}"`, type: 'error'};
                 } else {
                     return {msg: `Неверный идентификатор объекта: "${tokens[1]}"`, type: 'error'};
                 }
             case "write":
                 if (RegExp("[0-9]*").test(tokens[1]) && 0 <= tokens[1] && tokens[1] < displayedData.length) {
-                    if (displayedData[tokens[1]][0].write) return {msg: `Выполнена запись в объект №${tokens[1]}: "${displayedData[tokens[1]][1]}"`, type: 'success'};
+                    if (displayedData[tokens[1]][0].write) {
+                        writeFile(tokens[1], tokens[2]);
+                        update(login);
+                        return {msg: `Выполнена запись в объект №${tokens[1]}: "${displayedData[tokens[1]][1]}": ${displayedData[tokens[1]][1].content}`, type: 'success'};
+                    }
                     else return {msg: `Недостаточно прав для записи в объект №${tokens[1]}: "${displayedData[tokens[1]][1]}"`, type: 'error'};
                 } else {
                     return {msg: `Неверный идентификатор объекта: "${tokens[1]}"`, type: 'error'};
@@ -74,6 +78,32 @@ export const LandingPage = () => {
                 return {msg: `Не распознано имя командлета: "${tokens[0]}"`, type: 'error'};
         }
     };
+
+    const handleFileChange = (event) => {
+        const files = event.target.files;
+        var toExport = [];
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const reader = new FileReader();
+
+            reader.onload = (e) => {
+                const content = e.target.result;
+                // console.log(`File name: ${file.name}`);
+                // console.log(`File content: ${content}`);
+                toExport.push({
+                    name: file.name,
+                    content: content
+                });
+            };
+
+            reader.onerror = (e) => {
+                console.error(`Error reading file: ${file.name}`, e);
+            };
+
+            reader.readAsText(file);
+        }
+        setFiles(toExport);
+    };
     
     return (
         <VBoxPanel valign='center'
@@ -88,7 +118,7 @@ export const LandingPage = () => {
                                gap='20px'>
                         <VBoxPanel gap='10px' className={`y-scroll ${css.objects}`}>
                             {displayedData.map((o, i) => <CObject key={i}
-                                                                  name={o[1]}
+                                                                  name={o[1].name}
                                                                   rights={o[0]}/>)}
                         </VBoxPanel>
                         <Console className={css.con}
@@ -109,6 +139,7 @@ export const LandingPage = () => {
                             regex="."
                             inputRef={identityRef}/>
                     <ExButton onClick={handleLoginClick}>Войти</ExButton>
+                    <input type="file" multiple onChange={handleFileChange} />
                 </div>
             }
         </VBoxPanel>

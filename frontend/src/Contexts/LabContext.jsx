@@ -16,27 +16,10 @@ export const LabContext = createContext();
 
 export const LabProvider = ({ children }) => {
     const subjects = ["Олег", "Ваня", "Антон", "Abobabebebe", "Igor"];
-    const objects = ["Object 1", "Object 2", "Object 3", "Object 4", "Object 5"];
+    var objects = [];
+    const nobj = 5;
 
-    const rights = [];
-
-    const getRandomBoolean = () => {
-        return Math.random() > 0.5;
-    }
-
-    for (var s = 0; s < subjects.length; s++) {
-        rights.push([]);
-        for (var o = 0; o < objects.length; o++) {
-            rights[s].push(new Rights(
-                getRandomBoolean(),
-                getRandomBoolean(),
-                getRandomBoolean()
-            ));
-        }
-    }
-    for (var o = 0; o < objects.length; o++) {
-        rights[4][o] = new Rights(true, true, true);
-    }
+    var rights = [];
 
     const getSubjectRights = (sub) => {
         return rights[subjects.indexOf(sub)].map((e, i) => [e, objects[i]]);
@@ -62,12 +45,45 @@ export const LabProvider = ({ children }) => {
         return false;
     }
 
+    const setFiles = (files) => {
+        objects = files;
+
+        rights = [];
+
+        const getRandomBoolean = () => {
+            return Math.random() > 0.5;
+        }
+    
+        for (var s = 0; s < subjects.length; s++) {
+            rights.push([]);
+            for (var o = 0; o < nobj; o++) {
+                rights[s].push(new Rights(
+                    getRandomBoolean(),
+                    getRandomBoolean(),
+                    getRandomBoolean()
+                ));
+            }
+        }
+
+        for (var o = 0; o < nobj; o++) {
+            rights[4][o] = new Rights(true, true, true);
+        }
+
+        console.log(rights);
+    };
+
+    const writeFile = (id, text) => {
+        objects[id].content = text;
+    };
+
     return (
         <LabContext.Provider value={{
             subjects,
             objects,
             getSubjectRights,
-            setRight
+            setRight,
+            setFiles,
+            writeFile
         }}>
             {children}
         </LabContext.Provider>
